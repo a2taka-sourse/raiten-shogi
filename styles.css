@@ -1,0 +1,78 @@
+:root{color-scheme:light;--ink:#173640;--ink-soft:#45626a;--blue:#246c80;--cyan:#72c4cf;--mist:#e8f0ef;--line:#b6c6c3;--board:#dcc292;--board-line:#8e754e;--piece:#f5ebd0;--piece-edge:#9b8053;--danger:#a6453d}
+*{box-sizing:border-box}
+html{min-width:320px}
+body{margin:0;background:var(--mist);color:var(--ink);font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;line-height:1.55}
+button,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #087f9a;outline-offset:3px}
+.page{max-width:1190px;margin:0 auto;padding:0 22px}
+.site-header{min-height:94px;display:flex;align-items:center;gap:15px;border-bottom:1px solid var(--line)}
+.brand-mark{height:54px;width:54px;display:grid;place-items:center;background:var(--ink);color:#f8f1db;border-radius:7px;font:700 34px/1 "Yu Mincho","Hiragino Mincho ProN",serif;box-shadow:inset 0 0 0 2px #a3d2d6}
+.brand-copy h1{font:700 28px/1.2 "Yu Mincho","Hiragino Mincho ProN",serif;letter-spacing:.09em;margin:0}
+.brand-copy p{margin:2px 0 0;font-size:13px;color:var(--ink-soft);letter-spacing:.08em}
+.wiki-link{margin-left:auto;color:var(--blue);font-size:13px;text-decoration-thickness:1px;text-underline-offset:4px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:35px;padding:30px 0 36px;align-items:start}
+.game-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:17px}
+.rule-badge{display:inline-block;background:#d1e6e7;color:#174c59;padding:4px 9px;border-radius:3px;font-size:12px;font-weight:700}
+.game-head h2{font-size:22px;line-height:1.35;margin:8px 0 0}
+.quiet-button{border:1px solid #8fa9ad;background:transparent;color:var(--ink);border-radius:4px;padding:7px 12px;white-space:nowrap}
+.quiet-button:hover{background:#d8e8e8}
+.hand-row{max-width:626px;min-height:64px;display:flex;align-items:center;gap:16px;border-block:1px solid var(--line);padding:7px 4px}
+.opponent-hand{margin-bottom:12px}
+.player-hand{margin-top:12px}
+.hand-label{flex:none;width:111px;font-size:12px;font-weight:700;color:var(--ink-soft);line-height:1.35;white-space:nowrap}
+.side-dot{display:inline-block;width:8px;height:8px;margin-right:5px;border-radius:50%;vertical-align:1px}
+.player-dot{background:#1b8799}.ai-dot{background:#a66d54}
+.hand-pieces{display:flex;gap:5px;align-items:center;flex-wrap:wrap;min-height:39px}
+.hand-empty{font-size:13px;color:#70878a}
+.hand-piece{min-width:39px;height:37px;border:1px solid var(--piece-edge);border-radius:3px;background:var(--piece);color:var(--ink);font:700 18px "Yu Mincho","Hiragino Mincho ProN",serif;position:relative;display:flex;align-items:center;justify-content:center}
+.hand-piece span{position:absolute;right:1px;bottom:0;background:var(--ink);color:white;border-radius:2px;padding:0 3px;font:700 10px/1.3 sans-serif}
+.hand-piece.selectable:hover,.hand-piece.selected{border-color:#146e85;box-shadow:0 0 0 3px #70c1cf}
+.hand-piece:disabled{cursor:default;opacity:1}
+.board-frame{width:min(100%,626px);padding:12px;background:#143b49;border-radius:6px;box-shadow:0 9px 30px rgba(18,52,60,.19)}
+.board{width:100%;aspect-ratio:1;display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);border:2px solid #664d2f;background:var(--board)}
+.square{display:grid;place-items:center;position:relative;min-width:0;min-height:0;margin:0;border:0;border-right:1px solid var(--board-line);border-bottom:1px solid var(--board-line);border-radius:0;background:linear-gradient(135deg,rgba(255,251,230,.12),transparent 60%);padding:3px;color:var(--ink)}
+.square:nth-child(9n){border-right:0}.square:nth-child(n+73){border-bottom:0}
+.square:hover{background-color:rgba(84,182,192,.22)}
+.square.selected{background-color:#8fcdd2}
+.square.last-from,.square.last-to{background-color:rgba(255,251,218,.48)}
+.square.checked{background-color:rgba(200,79,62,.32)}
+.square.legal::after{content:"";position:absolute;width:27%;aspect-ratio:1;border-radius:50%;background:rgba(9,103,130,.67);pointer-events:none;z-index:2}
+.square.legal.occupied::after{width:80%;height:80%;background:transparent;border:3px solid #057b9d;border-radius:6px}
+.square .piece{width:88%;height:92%;display:grid;place-items:center;position:relative;filter:drop-shadow(0 2px 1px rgba(79,51,28,.3))}
+.piece-shape{position:absolute;inset:0;background:var(--piece-edge);clip-path:polygon(50% 0,94% 18%,85% 98%,15% 98%,6% 18%)}
+.piece-shape::after{content:"";position:absolute;inset:2px;background:var(--piece);clip-path:inherit}
+.piece.ai .piece-shape{transform:rotate(180deg)}
+.piece-glyph{position:relative;z-index:1;font:700 clamp(18px,3.2vw,32px)/1 "Yu Mincho","Hiragino Mincho ProN",serif;transform:translateY(3px)}
+.piece.promoted .piece-glyph{color:#9d392f}
+.side-panel{border-top:4px solid var(--ink);background:#f7f9f6;padding:2px 22px 9px;box-shadow:0 1px 0 #d3dfdc}
+.panel-section{padding:20px 0 22px;border-bottom:1px solid var(--line)}
+.panel-section:last-child{border-bottom:0}
+.panel-section h2{margin:0 0 14px;font-size:17px}
+.new-game label{display:block;font-size:12px;font-weight:700;color:var(--ink-soft);margin:13px 0 5px}
+.new-game select{width:100%;padding:9px;border:1px solid #8da7a7;border-radius:3px;background:white;color:var(--ink)}
+.primary-button{background:var(--blue);color:white;border:1px solid var(--blue);border-radius:4px;padding:10px 14px;font-weight:700}
+.primary-button:hover{background:#15566a}
+.new-game .primary-button{width:100%;margin-top:18px}
+.setting-note{font-size:11px;color:var(--ink-soft);margin:8px 0 0}
+.guidance p{font-size:14px;min-height:66px;margin:0}
+.selected-piece{font-size:13px;color:#295968;min-height:20px;font-weight:700}
+.history-list{padding:0 0 0 26px;margin:0;max-height:225px;overflow:auto;font-size:13px;font-variant-numeric:tabular-nums}
+.history-list li{padding:3px 0;border-bottom:1px solid #e2e9e7}
+.history-list li:last-child{font-weight:700}
+footer{border-top:1px solid var(--line);padding:18px 0 28px;color:var(--ink-soft);font-size:12px}
+dialog{border:1px solid #6f9297;box-shadow:0 16px 60px rgba(10,31,38,.32);border-radius:7px;color:var(--ink);background:#fafbf8;max-width:min(92vw,550px)}
+dialog::backdrop{background:rgba(10,31,38,.57)}
+.choice-dialog{padding:22px;min-width:min(92vw,340px)}
+.dialog-title{font-size:19px;font-weight:700}
+.choice-dialog p{font-size:14px;margin:9px 0 20px}
+.dialog-actions{display:flex;justify-content:end;gap:9px}
+.dialog-actions button:not(.primary-button){background:white;border:1px solid #8fa9ad;border-radius:4px;padding:10px 14px}
+.rules-dialog{padding:23px 27px 27px;line-height:1.8}
+.rules-top{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.rules-top h2{margin:0;font-size:22px}
+.rules-dialog p{font-size:14px}
+.rules-note{padding:13px;background:#e3efee;border-left:3px solid var(--blue)}
+@media(max-width:880px){.layout{grid-template-columns:1fr;gap:12px}.side-panel{max-width:626px}.page{padding:0 16px}.board-frame{padding:9px}}
+@media(max-width:560px){.site-header{min-height:78px;gap:10px}.brand-mark{width:45px;height:45px;font-size:27px}.brand-copy h1{font-size:21px}.brand-copy p{font-size:11px}.wiki-link{font-size:11px}.layout{padding-top:17px}.game-head h2{font-size:18px}.game-head{margin-bottom:11px}.rule-badge{font-size:10px}.hand-row{gap:8px;min-height:58px}.hand-label{width:89px;font-size:10px}.hand-piece{height:32px;min-width:32px;font-size:16px}.board-frame{padding:5px}.square{padding:1px}.piece-glyph{font-size:clamp(15px,5.3vw,24px)}.piece-shape::after{inset:1px}.side-panel{padding-inline:17px}.panel-section{padding-block:16px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:0.01ms!important;transition-duration:0.01ms!important}}

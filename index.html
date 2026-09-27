@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#153847">
+  <meta name="description" content="禮天将棋の試作ルールを、弱いAIとブラウザで対局できます。">
+  <title>禮天将棋 | ひとりで対局</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+  <div class="page">
+    <header class="site-header">
+      <div class="brand-mark" aria-hidden="true">禮</div>
+      <div class="brand-copy">
+        <h1>禮天将棋</h1>
+        <p>ひとりで対局</p>
+      </div>
+      <a class="wiki-link" href="https://shikabaton.miraheze.org/wiki/メインページ">しかバトン Wiki</a>
+    </header>
+
+    <main class="layout">
+      <section class="game-area" aria-label="将棋盤">
+        <div class="game-head">
+          <div>
+            <span class="rule-badge" id="rule-badge">試作ルール・読み方A</span>
+            <h2 id="game-status" aria-live="polite">対局を準備しています</h2>
+          </div>
+          <button type="button" class="quiet-button" id="rules-button">遊び方</button>
+        </div>
+
+        <div class="hand-row opponent-hand">
+          <div class="hand-label"><span class="side-dot ai-dot"></span>AIの持ち駒</div>
+          <div class="hand-pieces" id="ai-hand"></div>
+        </div>
+
+        <div class="board-frame">
+          <div class="board" id="board" role="grid" aria-label="禮天将棋の盤"></div>
+        </div>
+
+        <div class="hand-row player-hand">
+          <div class="hand-label"><span class="side-dot player-dot"></span>あなたの持ち駒</div>
+          <div class="hand-pieces" id="player-hand"></div>
+        </div>
+      </section>
+
+      <aside class="side-panel">
+        <div class="panel-section new-game">
+          <h2>対局の設定</h2>
+          <label for="side-select">あなたの手番</label>
+          <select id="side-select">
+            <option value="w">先手</option>
+            <option value="b">後手</option>
+          </select>
+          <label for="reading-select">成りの読み方</label>
+          <select id="reading-select">
+            <option value="A">A・成ると動きが変わる</option>
+            <option value="B">B・成ると動きが増える</option>
+          </select>
+          <button type="button" class="primary-button" id="new-game">新しい対局を始める</button>
+          <p class="setting-note">設定は新しい対局から反映されます。</p>
+        </div>
+        <div class="panel-section guidance">
+          <h2>いまの一手</h2>
+          <p id="guidance" aria-live="polite">自分の駒を選ぶと、動ける場所が青く表示されます。</p>
+          <div class="selected-piece" id="selected-piece"></div>
+        </div>
+        <div class="panel-section history-section">
+          <h2>指し手</h2>
+          <ol id="history" class="history-list"></ol>
+        </div>
+      </aside>
+    </main>
+    <footer>禮天将棋は試作中です。盤面と駒の動きを確かめながら遊べます。</footer>
+  </div>
+
+  <dialog id="promotion-dialog" class="choice-dialog">
+    <div class="dialog-title">この駒を成りますか？</div>
+    <p id="promotion-description"></p>
+    <div class="dialog-actions">
+      <button type="button" id="do-not-promote">成らない</button>
+      <button type="button" id="do-promote" class="primary-button">成る</button>
+    </div>
+  </dialog>
+
+  <dialog id="rules-dialog" class="rules-dialog">
+    <div class="rules-top">
+      <h2>遊び方</h2>
+      <button type="button" id="close-rules" class="quiet-button">閉じる</button>
+    </div>
+    <p>駒を選び、青いマスを押すと移動します。取った駒は盤の下に並び、空いているマスに打てます。相手の「理」を詰ませると勝ちです。</p>
+    <p>相手側の三段に入る、そこから出る、またはその中で動くとき、成るかどうかを選べます。読み方Aでは成ると動きが置き換わり、読み方Bでは動きが増えます。</p>
+    <p>「将」「校」「卒」などの動きは普通の将棋と異なります。駒を選ぶと、動けるマスと駒の名前を確認できます。</p>
+    <p class="rules-note">仮のルール：持ち駒あり、同じ筋への卒の二枚打ちは不可、打ち卒詰めは可。同一局面が四回で引き分け、連続王手なら王手側の負けです。</p>
+  </dialog>
+</body>
+</html>
