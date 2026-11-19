@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#153847">
-  <meta name="description" content="禮天将棋の試作ルールを、弱いAIとブラウザで対局できます。">
+  <meta name="description" content="禮天将棋の試作ルールを、ブラウザでAIと対局できます。">
   <title>禮天将棋 | ひとりで対局</title>
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="app.mjs"></script>
@@ -52,6 +52,11 @@
           <select id="side-select">
             <option value="w">先手</option>
             <option value="b">後手</option>
+          </select>
+          <label for="strength-select">AIの強さ</label>
+          <select id="strength-select">
+            <option value="strong">強い・先を読む（1手約1秒）</option>
+            <option value="weak">やさしい・従来の試作AI</option>
           </select>
           <label for="reading-select">成りの読み方</label>
           <select id="reading-select">

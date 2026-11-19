@@ -8,14 +8,23 @@ const value={k:1000,h:1000,r:11,b:9,x:8,l:5,d:4,e:5,s:3.6,y:4.5,
   o:3.4,g:3.2,t:3.9,m:2.4,j:2.5,c:6,q:2.5,a:6,p:1,u:2.5};
 const handOrder=['r','b','x','l','d','s','o','t','j','q','p'];
 let game,pendingPromotion=null,generation=0;
+const THINK_MS=1000;
+let worker=null;
+try{worker=new Worker(new URL('./ai.worker.mjs',import.meta.url),{type:'module'});}catch{worker=null;}
+if(worker)worker.onerror=()=>{
+  // 探索AIが動かない環境では従来のAIで指す
+  worker=null;
+  if(game&&game.busy&&!game.over&&game.pos.side!==game.human)play(chooseAI());
+};
 
 function newGame(){
   generation++;
   const reading=$('reading-select').value;
   const human=$('side-select').value;
+  const strength=$('strength-select').value;
   const pos=new Position(reading);
-  game={pos,human,reading,legal:pos.legalMoves(),selected:null,last:null,
-    records:[],checks:[],keys:[pos.key()],over:null,busy:false};
+  game={pos,human,reading,strength,legal:pos.legalMoves(),selected:null,last:null,
+    records:[],moves:[],checks:[],keys:[pos.key()],over:null,busy:false};
   pendingPromotion=null;
   if(promoDialog.open)promoDialog.close();
   render();
@@ -150,6 +159,7 @@ function play(m){
   const from=drop?null:m.slice(0,2),to=m.slice(2,4);
   const before=drop?m[0]:game.pos.board[parseSquare(from)[1]][parseSquare(from)[0]];
   game.pos.apply(m);
+  game.moves.push(m);
   game.records.push({side,before,drop,from,to,promote:m.endsWith('+')});
   game.checks.push({side,check:game.pos.inCheck()});
   game.last={from,to};game.selected=null;
@@ -187,6 +197,15 @@ function queueAI(){
   if(game.over)return;
   game.busy=true;render();
   const expected=generation;
+  if(game.strength==='strong'&&worker){
+    // 探索AI：別スレッドで考え、戻ってきた手がいまの対局のものなら指す
+    worker.onmessage=({data})=>{
+      if(data.id!==expected||generation!==expected||game.over||game.pos.side===game.human)return;
+      play(data.move&&game.legal.includes(data.move)?data.move:chooseAI());
+    };
+    worker.postMessage({id:expected,reading:game.reading,moves:game.moves.slice(),ms:THINK_MS});
+    return;
+  }
   setTimeout(()=>{
     if(generation!==expected||game.over||game.pos.side===game.human)return;
     play(chooseAI());
