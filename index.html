@@ -17,21 +17,17 @@
         <h1>禮天将棋</h1>
         <p>ひとりで対局</p>
       </div>
-      <a class="wiki-link" href="https://shikabaton.miraheze.org/wiki/メインページ">しかバトン Wiki</a>
     </header>
 
     <main class="layout">
       <section class="game-area" aria-label="将棋盤">
         <div class="game-head">
-          <div>
-            <span class="rule-badge" id="rule-badge">試作ルール・読み方A</span>
-            <h2 id="game-status" aria-live="polite">対局を準備しています</h2>
-          </div>
+          <h2 id="game-status" aria-live="polite">対局を準備しています</h2>
           <button type="button" class="quiet-button" id="rules-button">遊び方</button>
         </div>
 
         <div class="hand-row opponent-hand">
-          <div class="hand-label"><span class="side-dot ai-dot"></span>AIの持ち駒</div>
+          <div class="hand-label">AIの持ち駒</div>
           <div class="hand-pieces" id="ai-hand"></div>
         </div>
 
@@ -40,7 +36,7 @@
         </div>
 
         <div class="hand-row player-hand">
-          <div class="hand-label"><span class="side-dot player-dot"></span>あなたの持ち駒</div>
+          <div class="hand-label">あなたの持ち駒</div>
           <div class="hand-pieces" id="player-hand"></div>
         </div>
       </section>
@@ -55,8 +51,8 @@
           </select>
           <label for="strength-select">AIの強さ</label>
           <select id="strength-select">
-            <option value="strong">強い・先を読む（1手約1秒）</option>
-            <option value="weak">やさしい・従来の試作AI</option>
+            <option value="strong">強い（先を読む、1手約1秒）</option>
+            <option value="weak">やさしい（従来の試作AI）</option>
           </select>
           <button type="button" class="primary-button" id="new-game">新しい対局を始める</button>
           <p class="setting-note">設定は新しい対局から反映されます。</p>
@@ -72,7 +68,10 @@
         </div>
       </aside>
     </main>
-    <footer>禮天将棋は試作中です。盤面と駒の動きを確かめながら遊べます。</footer>
+    <footer>
+      <p>禮天将棋の試作ルール（成りの読み方A）で遊べます。盤面と駒の動きを確かめながら指してください。</p>
+      <a class="wiki-link" href="https://shikabaton.miraheze.org/wiki/メインページ">しかバトン Wiki</a>
+    </footer>
   </div>
 
   <dialog id="promotion-dialog" class="choice-dialog">

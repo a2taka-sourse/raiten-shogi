@@ -1,6 +1,7 @@
 // 禮天将棋の探索AI。盤は 81 マスの整数配列、駒は種類番号×手番の符号。
 // rules.mjs と同じ動き・成り・打ちの規則を、前計算した利きの表で高速に扱う。
 import {START, PROMOTE, FILES} from './rules.mjs';
+import EVAL from './eval_table.mjs';
 
 const TYPES = ' khdesyogtmrblxcajqpu';          // 1..20
 const tid = ch => TYPES.indexOf(ch.toLowerCase());
@@ -91,8 +92,12 @@ const pz = (p, sq) => (p + 20) * 81 + sq;
 const hz = (si, t, n) => (si * 21 + t) * 20 + Math.min(n, 19);
 
 export class Engine {
-  constructor(reading = 'A') {
+  constructor(reading = 'A', table = EVAL) {
     this.reading = reading;
+    // 学習した評価の表（NNUE v6 から蒸留）。無ければ駒の価値＋位置の補正で評価する
+    this.pst = table ? Int32Array.from(table.pst) : null;
+    this.handT = table ? Int32Array.from(table.hand) : null;
+    this.tempo = table ? table.tempo : 0;
     const T = TABLES[reading]; this.gen = T.gen; this.atk = T.atk;
     this.b = new Int8Array(81);
     this.hand = [new Int8Array(21), new Int8Array(21)];
@@ -249,6 +254,21 @@ export class Engine {
 
   // 手番側から見た評価値
   evaluate() {
+    if (!this.pst) return this.evaluateClassic();
+    const b = this.b, pst = this.pst, ht = this.handT;
+    let v = this.side === 0 ? this.tempo : -this.tempo;
+    for (let s = 0; s < 81; s++) {
+      const p = b[s];
+      if (p > 0) v += pst[p * 81 + s];
+      else if (p < 0) v -= pst[-p * 81 + 80 - s];
+    }
+    for (const t of HAND_TYPES) {
+      const a = this.hand[0][t], c = this.hand[1][t];
+      for (let k = 0; k < 4; k++) { if (k < a) v += ht[t * 4 + k]; if (k < c) v -= ht[t * 4 + k]; }
+    }
+    return this.side === 0 ? v : -v;
+  }
+  evaluateClassic() {
     const b = this.b; let v = 0;
     for (let s = 0; s < 81; s++) {
       const p = b[s];
@@ -384,8 +404,8 @@ export class Searcher {
 }
 
 // 対局の手順（rules.mjs の表記）から局面を作り、ms ミリ秒考えて手を返す
-export function bestMove(reading, moves, ms) {
-  const e = new Engine(reading);
+export function bestMove(reading, moves, ms, table = EVAL) {
+  const e = new Engine(reading, table);
   for (const m of moves) e.play(m);
   const r = new Searcher(e).think(ms);
   return {...r, move: r.move < 0 ? null : Engine.toStr(r.move)};

@@ -38,7 +38,6 @@ function chosenMoves(){
   return game.legal.filter(m=>!isDrop(m)&&m.startsWith(game.selected.from));
 }
 function render(){
-  $('rule-badge').textContent='試作ルール・読み方A';
   if(game.over)statusEl.textContent=game.over;
   else if(game.busy)statusEl.textContent='AIが考えています…';
   else statusEl.textContent=game.pos.side===game.human?'あなたの手番です':'AIの手番です';
