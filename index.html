@@ -58,11 +58,6 @@
             <option value="strong">強い・先を読む（1手約1秒）</option>
             <option value="weak">やさしい・従来の試作AI</option>
           </select>
-          <label for="reading-select">成りの読み方</label>
-          <select id="reading-select">
-            <option value="A">A・成ると動きが変わる</option>
-            <option value="B">B・成ると動きが増える</option>
-          </select>
           <button type="button" class="primary-button" id="new-game">新しい対局を始める</button>
           <p class="setting-note">設定は新しい対局から反映されます。</p>
         </div>
@@ -95,7 +90,7 @@
       <button type="button" id="close-rules" class="quiet-button">閉じる</button>
     </div>
     <p>駒を選び、青いマスを押すと移動します。取った駒は盤の下に並び、空いているマスに打てます。相手の「理」を詰ませると勝ちです。</p>
-    <p>相手側の三段に入る、そこから出る、またはその中で動くとき、成るかどうかを選べます。読み方Aでは成ると動きが置き換わり、読み方Bでは動きが増えます。</p>
+    <p>相手側の三段に入る、そこから出る、またはその中で動くとき、成るかどうかを選べます。成ると動きが置き換わります（読み方A）。</p>
     <p>「将」「校」「卒」などの動きは普通の将棋と異なります。駒を選ぶと、動けるマスと駒の名前を確認できます。</p>
     <p class="rules-note">仮のルール：持ち駒あり、同じ筋への卒の二枚打ちは不可、打ち卒詰めは可。同一局面が四回で引き分け、連続王手なら王手側の負けです。</p>
   </dialog>
